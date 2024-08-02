@@ -94,12 +94,20 @@ export class AnalyticsService {
   private calculateAverages(stats: any, processingTimes: number[]) {
     Object.keys(stats.timeProcessedByDay).forEach((day) => {
       const times = stats.timeProcessedByDay[day];
-      stats.timeProcessedByDay[day] =
-        times.reduce((a, b) => a + b, 0) / times.length;
+      if (times.length > 0) {
+        const average = times.reduce((a, b) => a + b, 0) / times.length;
+        stats.timeProcessedByDay[day] = parseFloat(average.toFixed(2)); // Round to two decimal places
+      } else {
+        stats.timeProcessedByDay[day] = 0;
+      }
     });
+
     if (processingTimes.length > 0) {
-      stats.averageProcessingTime =
+      const overallAverage =
         processingTimes.reduce((a, b) => a + b, 0) / processingTimes.length;
+      stats.averageProcessingTime = parseFloat(overallAverage.toFixed(2)); // Round to two decimal places
+    } else {
+      stats.averageProcessingTime = 0;
     }
   }
 }
