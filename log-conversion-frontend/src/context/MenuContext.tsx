@@ -2,10 +2,11 @@ import {
   createContext,
   useContext,
   useState,
+  useEffect,
   ReactNode,
   FunctionComponent,
 } from "react";
-import { redirect, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 
 interface MenuContextType {
   selectedMenuItem: string;
@@ -18,12 +19,25 @@ export const MenuProvider: FunctionComponent<{ children: ReactNode }> = ({
   children,
 }) => {
   const router = useRouter();
-  const [selectedMenuItem, setSelectedMenuItem] = useState<string>("Dashboard");
+  const [selectedMenuItem, setSelectedMenuItem] = useState<string>("");
+
+  useEffect(() => {
+    // Assegure que o código é executado no lado do cliente
+    const pathToMenuItem: { [key: string]: string } = {
+      "/dashboard": "Dashboard",
+      "/conversor": "Converter Logs",
+    };
+
+    if (typeof window !== "undefined") {
+      const currentPath = window.location.pathname;
+      const menuItem = pathToMenuItem[currentPath];
+      setSelectedMenuItem(menuItem);
+    }
+  }, []);
 
   const setMenuAndNavigate = (name: string, path: string) => {
-    setSelectedMenuItem(name);
-    console.log("adasda", path)
     router.push(path);
+    setSelectedMenuItem(name);
   };
 
   return (
@@ -35,8 +49,10 @@ export const MenuProvider: FunctionComponent<{ children: ReactNode }> = ({
 
 export const useMenu = () => {
   const context = useContext(MenuContext);
+
   if (context === undefined) {
     throw new Error("useMenu must be used within a MenuProvider");
   }
+
   return context;
 };
