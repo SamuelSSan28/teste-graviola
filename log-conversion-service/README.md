@@ -10,30 +10,7 @@ Este é um serviço backend desenvolvido com NestJS para converter arquivos de l
 - [Firebase](https://firebase.google.com/) - Banco de Dados NoSQL.
 - [Jest](https://jestjs.io/) - Framework de teste de JavaScript.
 
-## Estrutura do Projeto
-
-```plaintext
-src/
-├── controllers/
-│   └── log.controller.ts
-├── services/
-│   └── log.service.ts
-├── modules/
-│   └── log.module.ts
-├── dto/
-│   └── convert-log.dto.ts
-├── utils/
-│   └── logConverter.ts
-├── firebase/
-│   └── firebase.service.ts
-├── tests/
-│   └── log.service.spec.ts
-└── main.ts
-firebaseConfig.ts
-package.json
-tsconfig.json
-```
-
+ 
 ## Configuração do Firebase
 
 Para configurar o Firebase, você precisará de um arquivo de credenciais JSON. Baixe suas credenciais do Firebase Console e salve o arquivo em um local acessível. Atualize o caminho do arquivo no `firebase.service.ts` conforme necessário.
@@ -55,8 +32,10 @@ Para configurar o Firebase, você precisará de um arquivo de credenciais JSON. 
 
 3. **Configure o Firebase**
 
-   - Coloque o arquivo de credenciais JSON em um diretório apropriado.
-   - Atualize o caminho do arquivo no `firebase.service.ts`.
+- Faça uma cópia do arquivo `.env.example` e renomeie para `.env`.
+
+- Preencha as variáveis de ambiente no arquivo `.env` com suas credenciais do Firebase e demais configurações necessárias.
+
 
 4. **Execute o Projeto**
    ```bash
@@ -67,7 +46,7 @@ Para configurar o Firebase, você precisará de um arquivo de credenciais JSON. 
 
 ### Converter Log
 
-**POST** `/logs/convert`
+**POST** `/parser/convert`
 
 Request Body:
 
@@ -86,6 +65,24 @@ Response:
 "MINHA CDN" ...
 ```
 
+**POST** `/parser/convertToStr`
+
+Request Body:
+
+```json
+{
+  "sourceUrl": "string"
+}
+```
+
+Response:
+
+```plaintext
+  {
+	"received": "312|200|HIT|\"GET /robots.txt HTTP/1.1\"|100.2\r\n101|200|MISS|\"POST /myImages HTTP/1.1\"|319.4\r\n199|404|MISS|\"GET /not-found HTTP/1.1\"|142.9\r\n312|200|INVALIDATE|\"GET /robots.txt HTTP/1.1\"|245.1\r\n",
+	"converted": "\"MINHA CDN\" GET 200 /robots.txt 100 312 HIT\n\"MINHA CDN\" POST 200 /myImages 319 101 MISS\n\"MINHA CDN\" GET 404 /not-found 143 199 MISS\n\"MINHA CDN\" GET 200 /robots.txt 245 312 INVALIDATE"
+  }
+```
 ### Obter Estatísticas
 
 **GET** `/logs/stats`
