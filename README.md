@@ -1,3 +1,7 @@
+<p align="center" style="background-color:#24292e; padding: 8px;">
+  <img src="https://github.com/SamuelSSan28/teste-graviola/blob/main/log-conversion-frontend/public/logo_graviola.png?raw=true" alt="Logo Graviola" style="background: #24292e;">
+</p>
+
 # Teste Graviola - Desafio Técnico
 
 Este repositório contém dois principais diretórios, `log-conversion-frontend` e `log-conversion-service`, que formam um sistema completo para converter arquivos de log de um formato para outro.
