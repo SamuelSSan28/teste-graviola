@@ -8,12 +8,20 @@ import {
   Grid,
   Snackbar,
   Alert,
+  CircularProgress,
 } from "@mui/material";
 import LogDisplay from "@/components/LogDisplay";
+import { convertLogs } from "@/services/logServise";
+
+interface ILogs {
+  received: string;
+  converted: string;
+}
 
 function ConvertLogs() {
   const [url, setUrl] = useState("");
-  const [logs, setLogs] = useState({ received: "", converted: "" });
+  const [logs, setLogs] = useState<ILogs | null>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [snackbar, setSnackbar] = useState({
     open: false,
     message: "",
@@ -35,35 +43,38 @@ function ConvertLogs() {
     }
 
     try {
-      const response = await fetch(`/api/convert`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ sourceUrl: url }),
-      });
+      setIsLoading(true);
+      const { received, converted } = await convertLogs(url);
 
-      if (!response.ok) throw new Error("Falha na resposta do servidor.");
+      setLogs({ received, converted });
 
-      const blob = await response.blob();
-      const urlReceived = URL.createObjectURL(blob);
-
-      setLogs({ received: url, converted: urlReceived });
       setSnackbar({
         open: true,
         message: "Logs convertidos com sucesso!",
         severity: "success",
       });
     } catch (error: any) {
+      console.log(error)
       setSnackbar({
         open: true,
         message: "Erro ao converter logs: " + error.message,
         severity: "error",
       });
+    } finally {
+      setIsLoading(false);
     }
   };
 
   const handleDownload = () => {
+    if (!logs?.converted) {
+      setSnackbar({
+        open: true,
+        message: "Erro ao criar o arquivo",
+        severity: "error",
+      });
+      return;
+    }
+
     const element = document.createElement("a");
     element.href = logs.converted;
     element.download = "convertedLog.txt";
@@ -74,6 +85,9 @@ function ConvertLogs() {
 
   return (
     <Container>
+      <Typography variant="h4" gutterBottom>
+        Conversor
+      </Typography>
       <Typography variant="h6" gutterBottom>
         Converta seus logs do formato <strong>MINHA CDN</strong> para o formato{" "}
         <strong>Agora</strong>
@@ -91,27 +105,31 @@ function ConvertLogs() {
           }
         }}
       />
+
       <Button
         onClick={handleUrlSubmit}
         variant="contained"
         color="primary"
         style={{ marginTop: 16, float: "right" }}
+        disabled={isLoading}
       >
-        Converter
+        Converter {isLoading && <CircularProgress size={20} />}
       </Button>
 
-      <Grid container spacing={2} style={{ marginTop: 32 }}>
-        <Grid item xs={12} md={6}>
-          <LogDisplay title="Log Recebido" log={logs.received} />
+      {logs && (
+        <Grid container spacing={2} style={{ marginTop: 32 }}>
+          <Grid item xs={12} md={6}>
+            <LogDisplay title="Log Recebido" log={logs.received} />
+          </Grid>
+          <Grid item xs={12} md={6}>
+            <LogDisplay
+              title="Log Convertido"
+              log={logs.converted}
+              handleDownload={handleDownload}
+            />
+          </Grid>
         </Grid>
-        <Grid item xs={12} md={6}>
-          <LogDisplay
-            title="Log Convertido"
-            log={logs.converted}
-            handleDownload={handleDownload}
-          />
-        </Grid>
-      </Grid>
+      )}
 
       <Snackbar
         open={snackbar.open}
