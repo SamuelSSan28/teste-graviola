@@ -9,12 +9,12 @@ async function bootstrap() {
   
   app.use(json());
   app.use(urlencoded({ extended: true }));
-
+  app.enableCors();
   app.useGlobalPipes(new ValidationPipe({
     transform: true,
     exceptionFactory: (errors) => new BadRequestException(errors),
   }));
 
-  await app.listen(3000);
+  await app.listen(4000);
 }
 bootstrap();
