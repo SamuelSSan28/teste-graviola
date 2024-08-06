@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import * as admin from 'firebase-admin';
-import { FirebaseConfigService } from 'src/firebase-config/firebase-config.service';
 import { DashboardParamsDto } from './dtos/dashboard-params.dto';
+import { FirebaseConfigService } from '@src/firebase-config/firebase-config.service';
 
 @Injectable()
 export class AnalyticsService {

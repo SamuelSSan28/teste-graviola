@@ -2,7 +2,7 @@ import { Injectable, BadRequestException } from '@nestjs/common';
 import { HttpService } from '@nestjs/axios';
 import { firstValueFrom } from 'rxjs';
 import * as admin from 'firebase-admin';
-import { FirebaseConfigService } from 'src/firebase-config/firebase-config.service';
+import { FirebaseConfigService } from '@src/firebase-config/firebase-config.service';
 
 @Injectable()
 export class ParserService {
@@ -108,19 +108,34 @@ export class ParserService {
 
   private formatLine(line: string): string {
     const parts = line.split('|');
-    const method = this.extractHttpMethod(parts[3]);
-    const path = this.extractPath(parts[3]);
-    const roundedTime = Math.round(parseFloat(parts[4]));
-    return `"MINHA CDN" ${method} ${parts[1]} ${path} ${roundedTime} ${parts[0]} ${parts[2]}`;
+  
+    if (parts.length < 5) {
+      throw new Error('Linha de log está no formato incorreto');
+    }
+  
+    const host = parts[0]; // Host do log
+    const status = parts[1]; // Código de status HTTP
+    const cacheStatus = parts[2]; // Status do cache
+    const requestDetails = parts[3]; // Detalhes da requisição
+    const time = parseFloat(parts[4]); // Tempo de resposta
+  
+    // Método HTTP e o caminho da requisição
+    const method = this.extractHttpMethod(requestDetails);
+    const path = this.extractPath(requestDetails);
+  
+    const roundedTime = isNaN(time) ? 0 : Math.round(time);
+  
+    return `"MINHA CDN" ${method} ${status} ${path} ${roundedTime} ${host} ${cacheStatus}`;
   }
-
+  
   private extractHttpMethod(request: string): string {
-    const match = request.match(/GET|POST|PUT|DELETE/);
-    return match ? match[0] : 'UNKNOWN';
+    const match = request.match(/"(GET|POST|PUT|DELETE)/);
+    return match ? match[1] : 'UNKNOWN';
   }
-
+  
   private extractPath(request: string): string {
     const match = request.match(/\/\S*/);
     return match ? match[0] : '/unknown';
   }
+  
 }
