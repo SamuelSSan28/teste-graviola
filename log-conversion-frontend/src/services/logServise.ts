@@ -1,15 +1,4 @@
-const dev = {
-  baseURL: "http://localhost:4000",
-};
-
-const prod = {
-  baseURL: "https://production-example-server.examble",
-};
-
-const config = process.env.NODE_ENV === "production" ? prod : dev;
-
-const BASE_URL = config.baseURL;
-
+const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:4000";
 export interface IConvertLogsResponse {
   received: string;
   converted: string;

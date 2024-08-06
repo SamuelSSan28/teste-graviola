@@ -18,7 +18,7 @@ export class FirebaseConfigService {
     });
 
     this.firestore = admin.firestore();
-    this.testConnection();
+    //this.testConnection();
   }
 
   private async testConnection() {
