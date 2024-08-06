@@ -16,7 +16,7 @@ export interface IDashboardResponse {
 export const convertLogs = async (
   sourceUrl: string
 ): Promise<IConvertLogsResponse> => {
-  const response = await fetch(`${BASE_URL}/parser/convert`, {
+  const response = await fetch(`${BASE_URL}/parser/convertToStr`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
