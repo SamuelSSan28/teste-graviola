@@ -44,6 +44,7 @@ function ConvertLogs() {
 
     try {
       setIsLoading(true);
+      setLogs(null);
       const { received, converted } = await convertLogs(url);
 
       setLogs({ received, converted });
@@ -74,10 +75,16 @@ function ConvertLogs() {
       });
       return;
     }
-
+  
+    // Cria um blob a partir da string convertida
+    const blob = new Blob([logs.converted], { type: 'text/plain' });
     const element = document.createElement("a");
-    element.href = logs.converted;
+  
+    // Cria uma URL de objeto para o blob
+    element.href = URL.createObjectURL(blob);
     element.download = "convertedLog.txt";
+  
+    // Adiciona o link ao documento, simula um clique e, em seguida, remove o link
     document.body.appendChild(element);
     element.click();
     document.body.removeChild(element);
@@ -113,7 +120,7 @@ function ConvertLogs() {
         style={{ marginTop: 16, float: "right" }}
         disabled={isLoading}
       >
-        Converter {isLoading && <CircularProgress size={20} />}
+        Converter {isLoading && <CircularProgress size={20} sx={{marginLeft: 1.5}} />}
       </Button>
 
       {logs && (
