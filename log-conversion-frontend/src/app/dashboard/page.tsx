@@ -4,8 +4,6 @@ import {
   Typography,
   Container,
   Grid,
-  Card,
-  CardContent,
   Alert,
 } from "@mui/material";
 
@@ -16,8 +14,6 @@ import SwapHorizIcon from "@mui/icons-material/SwapHoriz";
 import Histogram from "@/components/Histogram";
 import DashboardSkeleton from "@/components/DashboardSkeleton";
 import { fetchDashboardData, IDashboardResponse } from "@/services/logServise";
-
-// Ajuste no Dashboard ou no ponto de entrada da aplicação
 import { Chart, registerables } from "chart.js";
 import InfoCard from "@/components/InfoCard";
 
@@ -64,20 +60,24 @@ function Dashboard() {
     labels: Object.keys(data?.conversionsPerDay || {}),
     datasets: [
       {
-        label: "Conversões por Dia",
+        label: 'Conversões por Dia',
         data: Object.values(data?.conversionsPerDay || {}),
-        backgroundColor: "rgba(75,192,192,0.6)",
+        backgroundColor: '#68D391', // Verde claro
+        borderWidth: 1,
+        hoverBackgroundColor: '#95e0b2', // Azul esverdeado no hover
       },
     ],
   };
-
+  
   const timeProcessedByDayData = {
     labels: Object.keys(data?.timeProcessedByDay || {}),
     datasets: [
       {
-        label: "Tempo Processado por Dia",
+        label: 'Tempo Processado por Dia',
         data: Object.values(data?.timeProcessedByDay || {}),
-        backgroundColor: "rgba(153,102,255,0.6)",
+        backgroundColor: '#4FD1C5', // Verde-água
+        borderWidth: 1,
+        hoverBackgroundColor: '#83ded6', // Azul pálido no hover
       },
     ],
   };
@@ -90,21 +90,21 @@ function Dashboard() {
       <Grid container spacing={3}>
         <Grid item xs={12} md={3}>
           <InfoCard
-            title="Total de Conversões"
+            title="Conversões"
             value={data.totalConversions}
             Icon={SwapHorizIcon}
           />
         </Grid>
         <Grid item xs={12} md={3}>
           <InfoCard
-            title="Total de Sucessos"
+            title="Sucessos"
             value={data.totalSuccess}
             Icon={CheckCircleIcon}
           />
         </Grid>
         <Grid item xs={12} md={3}>
           <InfoCard
-            title="Total de Erros"
+            title="Falhas"
             value={data.totalErrors}
             Icon={ErrorIcon}
           />

@@ -24,7 +24,7 @@ export const convertLogs = async (
     body: JSON.stringify({ sourceUrl, format: 'json' }),
   });
 
-  if (response.status != 200) {
+  if (response.status >= 400) {
     const errorResponse = await response.json();
     throw new Error(errorResponse.message);
   }
