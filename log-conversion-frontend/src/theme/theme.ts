@@ -21,12 +21,10 @@ const theme = createTheme({
     MuiContainer: {
       styleOverrides: {
         root: {
-          paddingLeft: '24px', // Defina o padding desejado aqui
-          paddingRight: '24px',
-          '@media (min-width: 600px)': {
-            paddingLeft: '16px', // Define para tamanhos de tela maiores
-            paddingRight: '16px',
-          },
+          paddingLeft: '16px', // Defina o padding desejado aqui
+          //paddingRight: '16px',
+          marginLeft: '8px', // Defina o margin desejado aqui
+          //marginRight: '0px',
         },
       },
     },

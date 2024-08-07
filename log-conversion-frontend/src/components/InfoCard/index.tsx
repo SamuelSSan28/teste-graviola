@@ -17,7 +17,7 @@ const InfoCard: React.FC<InfoCardProps> = ({ title, value, Icon }) => {
             <Icon color="primary"   sx={{ mr: 1, fontSize: { xs: '1.2rem', md: '1.5rem' } }} />
             <Typography
               sx={{
-                fontSize: { xs: '0.9rem', sm: '1rem', md: '1.15rem' },
+                fontSize: { xs: '0.9rem', sm: '1.2rem', md: '1.15rem' },
               }}
             >
               {title}
@@ -25,7 +25,7 @@ const InfoCard: React.FC<InfoCardProps> = ({ title, value, Icon }) => {
           </Box>
           <Typography
             sx={{
-              fontSize: { xs: '1.2rem', sm: '1rem', md: '1.5rem' },
+              fontSize: { xs: '1.2rem', sm: '1.2rem', md: '1.5rem' },
             }}
           >
             {value}
