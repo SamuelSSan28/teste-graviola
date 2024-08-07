@@ -107,7 +107,7 @@ describe('ParserController', () => {
 
       expect(mockResponse.status).toHaveBeenCalledWith(400);
       expect(mockResponse.json).toHaveBeenCalledWith({
-        message: 'Conversion failed',
+        message: 'Falha na conversão',
         error: errorMessage,
       });
     });
@@ -164,7 +164,7 @@ describe('ParserController', () => {
 
       expect(mockResponse.status).toHaveBeenCalledWith(400);
       expect(mockResponse.json).toHaveBeenCalledWith({
-        message: 'Conversion failed',
+        message: 'Falha na conversão',
         error: errorMessage,
       });
     });
