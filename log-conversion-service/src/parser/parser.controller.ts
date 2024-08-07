@@ -35,7 +35,7 @@ export class ParserController {
     } catch (error) {
       res
         .status(400)
-        .json({ message: 'Conversion failed', error: error.message });
+        .json({ message: 'Falha na conversão', error: error.message });
     }
   }
 
@@ -58,7 +58,7 @@ export class ParserController {
     } catch (error) {
       res
         .status(400)
-        .json({ message: 'Conversion failed', error: error.message });
+        .json({ message: 'Falha na conversão', error: error.message });
     }
   }
 }
